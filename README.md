@@ -2,7 +2,6 @@
 
 
 This repository contains the Supporting R/Cpp code for the article "Factor pre-training in Bayesian multivariate logistic models".
-The repo is structured as follows
 
 The repo is structured as follows:
 

@@ -50,7 +50,7 @@ flair.insects.th15 <- FLAIR_wrapper(
   Y_train_imputed_th15, X, k_max=k_insects+2, k=k_insects, method_rho = 'max', eps=0.005, 
   alternate_max=10, max_it=100, tol=0.01, post_process=T, subsample_index = 1:5, n_MC=100,
   C_lambda=10,  C_mu=10, C_beta=10, sigma=1.626, observed=observed_th15, randomized_svd=T, 
-  step_size_newton = 0.3, post_process_1=F, loss_tol=0.001)
+  step_size_newton = 0.3, loss_tol=0.001)
 time.flair.insects <- proc.time() - ptm; time.flair.insects[3]
 
 auc_flair_th15 <- compute_auc(Y_sel_th15, X, flair.insects.th15$Beta_tilde,
@@ -123,7 +123,7 @@ flair.insects.th3 <- FLAIR_wrapper(
   Y_train_imputed_th3, X, k_max=k_insects+2, k=k_insects, method_rho = 'max', eps=0.005, 
   alternate_max=10, max_it=100, tol=0.01, post_process=T, subsample_index = 1:5, n_MC=100,
   C_lambda=10,  C_mu=10, C_beta=10, sigma=1.626, observed=observed_th3, randomized_svd=T, 
-  step_size_newton = 0.25, post_process_1=F, loss_tol=0.001)
+  step_size_newton = 0.25, loss_tol=0.001)
 time.flair.insects <- proc.time() - ptm; time.flair.insects[3]
 
 auc_flair_th3 <- compute_auc(Y_sel_th3, X, flair.insects.th3$Beta_tilde,

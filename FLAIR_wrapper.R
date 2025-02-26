@@ -32,6 +32,7 @@ compute_W_j_bar <- function(lambda_j, beta_j, M, X){
 }
 
 compute_svd <- function(Y, k=10, randomized_svd=F){
+  n <- nrow(Y); p <- ncol(Y)
   if (n > p) {
     YtY <- t(Y) %*% Y
     if(randomized_svd){s_Y <- rsvd(YtY, k=k, nu=k, nv=k, p = 10, q = 2, sdist = "normal")}

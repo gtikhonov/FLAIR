@@ -1,8 +1,7 @@
 
+setwd("~/simulations")
+#load('.RData')
 
-
-setwd("C:/Users/mauri/Desktop/projects/blessing_of_dimensionality/R_code/simulations")
-load('.RData')
 source('helpers_simulations.R')
 source('../FLAIR_wrapper.R')
 

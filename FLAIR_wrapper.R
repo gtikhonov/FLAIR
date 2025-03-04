@@ -414,14 +414,16 @@ FLAIR_wrapper <- function(
   Lambda_tilde_sub <- as.matrix(Lambda_tilde[subsample_index,]); Beta_tilde_sub <- as.matrix(Beta_tilde[subsample_index,])
   Lambda_outer_samples <- sample_Lambda_outer(Beta_Lambda$Lambda_samples[,,subsample_index],
                                               Lambda_tilde_sub, rho)
-  Beta_samples_cc <- correct_Beta_samples(Beta_Lambda$Beta_samples[,,], 
-                                          Beta_tilde, rho)
+  #Beta_samples_cc <- correct_Beta_samples(Beta_Lambda$Beta_samples[,,], 
+  #                                        Beta_tilde, rho)
   
   output$Lambda_outer_samples = Lambda_outer_samples$Lambda_outer_samples; output$Lambda_outer_samples_cc = Lambda_outer_samples$Lambda_outer_samples_cc
   output$Lambda_tilde_sub; 
-  output$Lambda_samples = Beta_Lambda$Lambda_samples; output$Beta_samples = Beta_Lambda$Beta_samples
+  output$Lambda_samples = Beta_Lambda$Lambda_samples;
+  #output$Beta_samples = Beta_Lambda$Beta_samples
   output$D = D; output$beta_tilde_sub = Beta_tilde_sub; 
-  output$Beta_samples_cc = Beta_samples_cc; output$rho_mean = rho_mean; output$rho_max = rho_max
+  #output$Beta_samples_cc = Beta_samples_cc; 
+  output$rho_mean = rho_mean; output$rho_max = rho_max
   output$Vs = Vs; output$var_Beta = scales_Beta; output$var_Lambda = scales_Lambda
   return(output)
 }

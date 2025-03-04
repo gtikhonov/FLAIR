@@ -3,15 +3,13 @@ library(gllvm)
 library(pROC)
 library(truncnorm)
 
-
-# to install gmf, dowload it from https://github.com/kidzik/gmf and uncomment the following two line replacing path_to_gmf_lib with the correct path
-#path_to_gmf_lib <- "competitors/gmf/."
+#install.packages("devtools")  # If not installed
 #library("devtools")
-#install(path_to_gmf_lib,upgrade = FALSE)
+#devtools::install_github("kidzik/gmf")
 
 library("gmf")
 
-source('../FLAIR_wrapper.R')
+source('FLAIR_wrapper.R')
 
 generate_true_params <- function(p=1000, k=10, q=5, sigma_lambda=1, c_lambda=5, pi_lambda=0.5, 
                                  sigma_beta=1, c_beta=5, seed=NA){
@@ -74,7 +72,7 @@ compute_metrics_gmf <- function(Lambda_0_outer, Beta_0, gmf_result){
 
 
 
-compute_coverage <- function(Lambda_0_outer_sub, Beta_0, flair_estimate, alpha=0.05){
+compute_coverage <- function(Lambda_0_outer_sub, flair_estimate, alpha=0.05){
   flair.cc.qs <- apply(flair_estimate$Lambda_outer_samples_cc, c(1,2), function(x)(quantile(x, probs=c(alpha/2, 1-alpha/2))))
   flair.cc.l <- flair.cc.qs[1,,]
   flair.cc.u <- flair.cc.qs[2,,]

@@ -1,133 +1,12 @@
-install.package('mirtjml')
-
-
-library(mirtjml)
-
-#load('.RData')
-
 
 source('simulations/helpers_simulations.R')
 
 
 
-
-
-
-compute_perfomance_jml <- function(
-    jml_fit, X, Beta_0, Lambda_0_outer){
-  out <- c()
-  p <- nrow(jml_fit$A_hat)
-  out[1] <- norm((Beta_0 - jml_fit$d_hat), type='F') / sqrt(p)
-  err_beta_j <- sqrt((Beta_0 - jml_fit$d_hat)^2)
-  out[11] <- median(err_beta_j)
-  out[12] <- max(err_beta_j)
-  out[2] <- norm((Lambda_0_outer - jml_fit$A_hat %*% (crossprod(jml_fit$theta_hat)/n)
-                  %*% t(jml_fit$A_hat)), type='F') /
-    norm((Lambda_0_outer), type='F')
-  return(out)
-  
-}
-
-compute_vars_jml_hat <- function(jml_fit, X, D, R){
-  # this function is not optimized for computational efficiency but coded for clarity
-  p <- nrow(jml_fit$Gammahat)
-  P <- ncol(jml_fit$Gammahat) + ncol(jml_fit$Betahat) + ncol(jml_fit$Ahat)
-  n <- nrow(jml_fit$Thetahat)
-  Vars_hat <- list()
-  SEs_hat <- matrix(NA, p, P)
-  Tp <- ncol(R)
-  for(j in 1:p){
-    gamma_j <- jml_fit$Gammahat[j,]
-    beta_j <- jml_fit$Betahat[j,]
-    a_j <- jml_fit$Ahat[j,]
-    u_j <- c(gamma_j, beta_j, a_j)
-    
-    Phi_j_hat <- matrix(0, P, P)
-    for(i in 1:n){
-      theta_i <- jml_fit$Thetahat[i,]
-      x_i <- X[i,]
-      for(t in 1:Tp){
-        e_it <- c(D[t,], x_i, theta_i)
-        m_ijt <- sum(u_j * e_it)
-        p_ijt <- 1/(1+exp(-m_ijt))
-        w_ijt <- p_ijt*(1-p_ijt)
-        Phi_j_hat <- Phi_j_hat + R[i,t]*w_ijt* e_it %*% t(e_it)
-      }
-    }
-    Phi_j_hat <- Phi_j_hat/n
-    Vars_hat[[j]] <- solve(Phi_j_hat)
-    SEs_hat[j,] <- sqrt(diag(Vars_hat[[j]])) / sqrt(n)
-  }
-  return(list(Vars_hat=Vars_hat, SEs_hat=SEs_hat))
-}
-
-
-sample_Lambda_jml_old <- function(jml_fit, V_hats, n_MC=100, outer=T, subsample_index=1:100){
-  Lambdas_hat <- jml_fit$Ahat
-  n <- nrow(jml_fit$Thetahat)
-  p <- nrow(Lambdas_hat); q <- ncol(Lambdas_hat)
-  p_sample <- length(subsample_index)
-  Lambdas <- array(NA, dim=c(p,q, n_MC))
-  Lambdas_outer <- array(NA, dim=c(p_sample,p_sample, n_MC))
-  
-  for(i in 1:p){
-    V_hat <- V_hats[[i]]
-    V_hat_sq <- sqrtm(V_hat)
-    if(sum(is.na(V_hat_sq))){
-      print('NA')
-    }
-    Lambda_hat <- Lambdas_hat[i,]
-    for(s in 1:n_MC){
-      Lambda_s <- Lambda_hat + V_hat_sq %*% rnorm(q) / sqrt(n)
-      Lambdas[i,,s] <- Lambda_s
-      
-    }
-    if(outer){
-      for(s in 1:n_MC){
-        Lambdas_outer[,,s] <- Lambdas[subsample_index,,s] %*% diag(diag(crossprod(jml_fit$Thetahat)/n)) %*% t(Lambdas[subsample_index,,s])
-        
-      }
-    }
-  }
-  return(list(Lambdas=Lambdas, Lambdas_outer=Lambdas_outer))
-}
-
-
-sample_Lambda_jml <- function(jml_fit, V_hats, n_MC=100, outer=T, subsample_index=1:100){
-  Lambdas_hat <- jml_fit$Ahat
-  n <- nrow(jml_fit$Thetahat)
-  p <- nrow(Lambdas_hat); q <- ncol(Lambdas_hat)
-  p_sample <- length(subsample_index)
-  Lambdas_outer <- array(NA, dim=c(p_sample,p_sample, n_MC))
-  Lambda_sample <- matrix(NA, p_sample, q)
-  
-  V_hats_sqrt <- list()
-  for(i in 1:p_sample){
-    i_index <- subsample_index[i]
-    V_hat <- V_hats[[i_index]]
-    V_hats_sqrt[[i]] <- sqrtm(V_hat)
-    if(sum(is.na(V_hats_sqrt[[i]]))){
-      print('NA')
-    }
-  }
-  for(s in 1:n_MC){
-    for(i in 1:p_sample){
-      i_index <- subsample_index[i]
-      Lambda_hat <- Lambdas_hat[i_index,]
-      Lambda_s <- Lambda_hat +  V_hats_sqrt[[i]] %*% rnorm(q) / sqrt(n)
-      Lambda_sample[i,] <- Lambda_s
-    }
-    Lambdas_outer[,,s] <- 1/n* Lambda_sample %*% crossprod(jml_fit$Thetahat) %*% t(Lambda_sample)
-    
-  }
-  return(list(Lambdas_outer=Lambdas_outer))
-}
-
-
 # DGM params
 k <- 10
 p <- 1000
-n <- 500
+n <- 1000
 n_sim <- 50 
 
 # generate true params
@@ -218,7 +97,6 @@ for(sim in 1:n_sim){
 
 
 
-df_jml_sup_2[,]
 
 
 names_cols <- c('Beta_fr', 'Lambda_fr', 'Lambda_v_cov', 'Lambda_cc_cov', 'Lambda_v_len', 'Lambda_cc_len',
@@ -228,14 +106,9 @@ names_cols <- c('Beta_fr', 'Lambda_fr', 'Lambda_v_cov', 'Lambda_cc_cov', 'Lambda
 names(df_flair_sup_3) <- names_cols
 names(df_jml_sup_3) <- names_cols
 
-df_flair_sup_3
-df_jml_sup_3
 
-
-
-path_res <- paste0("simulations/results/supp_3/",  'p',p, '_n', n, '_N',N, '_df_flair.csv')
-write.csv(df_flair_sup_3, path_res)
-path_res <- paste0("simulations/results/supp_3/",  'p',p, '_n', n, '_N',N, '_df_jml.csv')
-write.csv(df_jml_sup_3, path_res)
-
+colMeans(df_flair_sup_3[,])
+colSds(as.matrix(df_flair_sup_3[,]))/sqrt(n_sim)
+colMeans(df_jml_sup_3[,])
+colSds(as.matrix(df_jml_sup_3[,]))/sqrt(n_sim)
 

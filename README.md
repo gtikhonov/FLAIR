@@ -14,7 +14,9 @@ The repo is structured as follows:
 ├── simulations
     ├── helpers_simulations.R
     ├── numerical_experiments.R
-    └── numerical_experiments_supplemental.R
+    ├── numerical_experiments_supplemental.R
+    ├── numerical_experiments_supplemental_2.R
+    └── numerical_experiments_supplemental_3.R
 ├── FLAIR_wrapper.R
 └── helper_functions.cpp
  ```  

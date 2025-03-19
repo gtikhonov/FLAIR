@@ -1,9 +1,5 @@
 
-#load('.RData')
-
-
 source('simulations/helpers_simulations.R')
-
 
 
 # DGM params

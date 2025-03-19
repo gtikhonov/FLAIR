@@ -1,14 +1,8 @@
 
 
 source('simulations/helpers_simulations.R')
-source('FLAIR_wrapper.R')
-#install.packages("promises")
-
-#install.packages('devtools')
-library(devtools)
 
 #devtools::install_version("gllvm", version = "1.4.3")
-
 library(gllvm)
 
 # DGM params

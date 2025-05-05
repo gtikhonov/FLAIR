@@ -113,7 +113,7 @@ def map_latent_factors(Y, X, Beta, Eta, Lambda, prior_var_eta, max_it, epsilon=0
 
 def compute_MAP_tf(Y, X, Beta, Eta, Lambda, prior_var_beta, prior_var_eta, prior_var_lambda, max_it=100, tol=0.01, 
                 C_lambda=10, C_mu=10, C_beta=10, step_size=0.5, alternate_max=5, post_process_1=True, loss_tol=0.001, 
-                autograd=True, eager_run=False, batch_size_beta=512, batch_size_eta=512, retrace_print=False, dtype=np.float64):
+                autograd=False, eager_run=False, batch_size_beta=512, batch_size_eta=512, retrace_print=False, dtype=np.float64):
   if dtype == 32:
     dtype = np.float32
   elif dtype == 64:

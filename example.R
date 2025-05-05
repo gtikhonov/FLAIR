@@ -8,7 +8,7 @@ option_list <- list(
 	make_option("--eager", default=0, help="use eager tf execution (1) or graph (0)"),
 	make_option("--bsb", default=512, help="batch size for map_regression_coeffs(...)"),
 	make_option("--bse", default=512, help="batch size for map_latent_factors(...)"),
-	make_option("--dtype", default=64, help="32 for sinle precision or 64 double precision")
+	make_option("--dtype", default=64, help="32 for single precision or 64 double precision")
 )
 opt <- parse_args(OptionParser(option_list=option_list))
 

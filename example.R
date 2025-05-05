@@ -3,7 +3,7 @@ library(optparse)
 option_list <- list( 
 	make_option(c("-p", "--p"), default=500, help="number of species"),
 	make_option(c("-n", "--n"), default=500, help="number of sampling units"),
-	make_option(c("-b", "--backend"), default="tf", help="c++ or tf"),
+	make_option(c("-b", "--backend"), default="c++", help="c++ or tf"),
 	make_option("--autograd", default=0, help="use autograd (1) or manual gradients and hessians (0)"),
 	make_option("--eager", default=0, help="use eager tf execution (1) or graph (0)"),
 	make_option("--bsb", default=512, help="batch size for map_regression_coeffs(...)"),
